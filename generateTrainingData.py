@@ -12,11 +12,17 @@ performTrainingData=True
 #location of the data
 #-----------------------#-----------------------#---------------------#
 
-DATADIR = "/home/navid/Personal_work/deepLearning/DogCatDetection/PetImages"
+DATADIR = "D:\deepLearning\DogCatCNN\PetImages"
 
-CATEGORIES = ["Dog", "Cat"]
-IMG_SIZE=(80,80)
-training_data=[]
+CATEGORIES = ["Dog", "Cat"]  # inside PetImages folder we have Two folders called Dog and Cat, Accordingly
+                             # we given name in CATEGORIES ARRAY
+
+IMG_SIZE=80 # can be adjustable...
+
+# All images in the training data sholud be of same size, 
+# below piece of code will read each images and resize all images 
+ 
+training_data=[]  # create new variable to store resized images
 
 #-----------------------#-----------------------#---------------------#
 # creating data
@@ -31,7 +37,7 @@ def createTrainingData():
             for img in tqdm(os.listdir(path)):
                 try:
                     img_org=cv2.imread(os.path.join(path,img),cv2.IMREAD_GRAYSCALE)
-                    new_array = cv2.resize(img_org, IMG_SIZE)
+                    new_array = cv2.resize(img_org, (IMG_SIZE,IMG_SIZE))
                     training_data.append([new_array, class_num])
                 #     plt.imshow(new_array,cmap='gray')
                 #     plt.show()
@@ -64,7 +70,7 @@ for features,label in training_data:
     y.append(label)
 
 #convert X data to numpy and reshape to image side
-X = np.array(X).reshape(-1, IMG_SIZE[0], IMG_SIZE[0], 1)
+X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
 
 
 #-----------------------#-----------------------#---------------------#

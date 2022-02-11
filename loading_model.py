@@ -1,31 +1,28 @@
-from cv2 import imread
-import numpy as np
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import os
+
 import cv2
-import pickle
+import tensorflow as tf
+import os
+
+DATADIR = "D:\deepLearning\DogCatCNN\PetImages\Dog"
+DATADIR2 = "D:\deepLearning\DogCatCNN\PetImages\CAT"
+CATEGORIES = ["Dog", "Cat"]
+
+filename="24.jpg"
+path_toImage=str(os.path.join(DATADIR,filename))
 
 
+# img_array = cv2.imread(path_toImage, cv2.IMREAD_GRAYSCALE)
+# cv2.imshow("img",img_array)
+# cv2.waitKey()
+def prepare(filepath):
+    IMG_SIZE = 80  # 50 in txt-based
+    img_array = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+    new_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
+    return new_array.reshape(-1, IMG_SIZE, IMG_SIZE, 1)
 
-#loading data
-# mnist = tf.keras.datasets.mnist
-# (x_train, y_train),(x_test, y_test) = mnist.load_data()
 
+model = tf.keras.models.load_model("dogCatTrained.model")
 
-
-
-
-
-# #loading trained Network
-# new_model = tf.keras.models.load_model('epic_num_reader.model')
-# predictions = new_model.predict(x_test)
-
-# #print(predictions)
-
-# detect=5 #passing the input
-
-# print(np.argmax(predictions[detect]))
-
-# plt.imshow(x_test[detect],cmap=plt.cm.binary)
-# plt.show()
+prediction = model.predict([prepare(path_toImage)])
+print(prediction)  # will be a list in a list.
+print(CATEGORIES[int(prediction[0][0])])
